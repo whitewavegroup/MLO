@@ -1,0 +1,120 @@
+"use client";
+import React, { createContext, useContext, useState, useMemo } from "react";
+
+type Lang = "en" | "es";
+type Dict = Record<string, string>;
+
+const dict: Record<Lang, Dict> = {
+  en: {
+    brand: "Texas Loan Keys — Hector Blancovitch, Mortgage Loan Officer",
+    primaryCTA: "Start Pre-Qualification",
+    secondaryCTA: "Call 469-688-5222",
+    heroTitle: "Home financing, explained clearly and done right.",
+    heroSub: "Helping families become properly protected, debt free, and financially independent.",
+    programs: "Loan Programs",
+    stepsTitle: "5 Steps to Homeownership",
+    step1: "1) Quick Discovery",
+    step2: "2) Smart Pre-Approval",
+    step3: "3) Find Your Home",
+    step4: "4) Underwriting",
+    step5: "5) Close & Celebrate",
+    funnelTitle: "Get your plan — NEPQ guided",
+    continue: "Continue",
+    back: "Back",
+    submit: "Submit",
+    thanksTitle: "Thanks! Your info was received.",
+    thanksBody: "We’ll contact you shortly to confirm details. Consent is not required to purchase.",
+    ask_who: "Who are we helping today?",
+    ask_goal: "Why is now the right time to explore financing?",
+    ask_timeline: "What timeline are you aiming for?",
+    ask_payment: "What monthly payment range would feel comfortable?",
+    ask_down: "About how much do you plan to use for down payment?",
+    ask_credit: "How would you describe your credit today?",
+    ask_agent: "Are you currently working with a real estate agent?",
+    ask_contact: "Best way to reach you?",
+    name: "Full name",
+    email: "Email",
+    phone: "Mobile phone",
+    timePref: "Preferred call time",
+    morning: "Morning",
+    afternoon: "Afternoon",
+    evening: "Evening",
+    consent: "By submitting, you agree to be contacted at the number/email provided, including by call, text, or email. Consent is not a condition of purchase. Message/data rates may apply.",
+    disclaimer: "Not a commitment to lend. All loans subject to credit approval, verification, and acceptable property appraisal.",
+    equalHousing: "Equal Housing Opportunity",
+    footerLegal: "HECTOR L BLANCOVITCH • NMLS ID #2397888 • Licensed in TX • Mortgage Branch Office: 1022 S Greenville Ave, Suite 200, Allen, TX 75002 • Representing: Primerica Mortgage, LLC, NMLS #1723477 • Phone: 469-688-5222 • Email: hblancovitch@gmail.com",
+    primericaNote: "Online identification must follow Primerica guidelines. Use approved titles and descriptions only.",
+    disclosuresLabel: "Disclosures",
+    disclosuresURL: "https://Bit.ly/PriMortgage",
+    nmlsLabel: "NMLS Consumer Access",
+    nmlsURL: "https://nmlsconsumeraccess.org",
+    langBtn: "Español",
+    openInTab: "Open form in new tab",
+    cookieTitle: "Cookies & tracking",
+    cookieBody: "We use essential cookies to run this site and optional analytics to improve your experience. You can change your choice anytime.",
+    acceptAll: "Accept all",
+    reject: "Reject non‑essential",
+    privacy: "Privacy Policy"
+  },
+  es: {
+    brand: "Texas Loan Keys — Héctor Blancovitch, Oficial de Préstamos",
+    primaryCTA: "Iniciar Pre-Calificación",
+    secondaryCTA: "Llamar 469-688-5222",
+    heroTitle: "Financiamiento de vivienda, claro y bien hecho.",
+    heroSub: "Ayudando a las familias a estar correctamente protegidas, libres de deudas e independientes financieramente.",
+    programs: "Programas de Préstamo",
+    stepsTitle: "5 Pasos hacia tu Casa",
+    step1: "1) Descubrimiento Rápido",
+    step2: "2) Pre-Aprobación Inteligente",
+    step3: "3) Encuentra tu Casa",
+    step4: "4) Underwriting",
+    step5: "5) Cierre y ¡A Celebrar!",
+    funnelTitle: "Obtén tu plan — con guía NEPQ",
+    continue: "Continuar",
+    back: "Atrás",
+    submit: "Enviar",
+    thanksTitle: "¡Gracias! Recibimos tu información.",
+    thanksBody: "Te contactaremos pronto para confirmar detalles. El consentimiento no es requisito para comprar.",
+    ask_who: "¿A quién estamos ayudando hoy?",
+    ask_goal: "¿Por qué este es el momento adecuado para explorar financiamiento?",
+    ask_timeline: "¿Qué plazo te gustaría?",
+    ask_payment: "¿Qué pago mensual te resultaría cómodo?",
+    ask_down: "¿Cuánto planeas usar para el pago inicial?",
+    ask_credit: "¿Cómo describirías tu crédito hoy?",
+    ask_agent: "¿Trabajas actualmente con un agente de bienes raíces?",
+    ask_contact: "¿Cuál es la mejor forma de contactarte?",
+    name: "Nombre completo",
+    email: "Correo electrónico",
+    phone: "Celular",
+    timePref: "Horario preferido",
+    morning: "Mañana",
+    afternoon: "Tarde",
+    evening: "Noche",
+    consent: "Al enviar, aceptas ser contactado al número/correo provisto, incluyendo llamada, texto o email. El consentimiento no es condición de compra. Pueden aplicar cargos de tu proveedor.",
+    disclaimer: "Esto no es un compromiso para prestar. Todos los préstamos están sujetos a aprobación de crédito, verificación y tasación aceptable de la propiedad.",
+    equalHousing: "Igualdad de Oportunidades de Vivienda",
+    footerLegal: "HECTOR L BLANCOVITCH • NMLS ID #2397888 • Licenciado en TX • Sucursal Hipotecaria: 1022 S Greenville Ave, Suite 200, Allen, TX 75002 • Representando: Primerica Mortgage, LLC, NMLS #1723477 • Tel: 469-688-5222 • Email: hblancovitch@gmail.com",
+    primericaNote: "La identificación en línea debe cumplir con las guías de Primerica. Usa solo títulos y descripciones aprobados.",
+    disclosuresLabel: "Divulgaciones",
+    disclosuresURL: "https://Bit.ly/PriMortgage",
+    nmlsLabel: "Acceso del Consumidor NMLS",
+    nmlsURL: "https://nmlsconsumeraccess.org",
+    langBtn: "English",
+    openInTab: "Abrir formulario en nueva pestaña",
+    cookieTitle: "Cookies y rastreo",
+    cookieBody: "Usamos cookies esenciales para operar este sitio y analíticas opcionales para mejorar tu experiencia. Puedes cambiar tu elección en cualquier momento.",
+    acceptAll: "Aceptar todo",
+    reject: "Rechazar no esenciales",
+    privacy: "Política de Privacidad"
+  }
+};
+
+type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: keyof Dict) => string; };
+const LanguageContext = createContext<Ctx>({ lang: "en", setLang: () => {}, t: (k) => k });
+export const useLang = () => useContext(LanguageContext);
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [lang, setLang] = useState<Lang>("en");
+  const t = useMemo(() => (key: keyof Dict) => dict[lang][key] ?? String(key), [lang]);
+  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
+}
